@@ -2,7 +2,7 @@ package day3;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -30,6 +30,30 @@ public class Main {
         System.out.println(sum);
     }
 
+    static int calculateVoltagePart2(String line) {
+        int maxIndice = 0;
+        int maxNumber = 0;
+
+        List<MaxValue> maxValues = new ArrayList<>(12);
+        Set<Integer> savedIndices = new HashSet<>();
+
+        while (maxValues.size() < 12) {
+
+            for (int i = 0; i < line.length(); i++) {
+                int number = Integer.parseInt(Character.toString(line.charAt(i)));
+                if(!savedIndices.contains(i) && number >= maxNumber) {
+                    maxNumber = number;
+                    maxIndice = i;
+                }
+            }
+            savedIndices.add(maxIndice);
+            maxValues.add(new MaxValue(maxNumber,maxIndice));
+        }
+        maxValues.sort(Comparator.comparingInt(MaxValue::getPosition));
+
+        return 0;
+    }
+
     static int calculateVoltage(String line) {
         int maxIndice = 0;
         int maxNumber = 0;
@@ -54,5 +78,19 @@ public class Main {
         sb.append(String.valueOf(maxNumber));
 
         return Integer.parseInt(sb.toString());
+    }
+
+    static class MaxValue {
+
+        public int value;
+        public int position;
+
+        public MaxValue(int value, int position) {
+            this.value = value;
+            this.position = position;
+        }
+
+        public int getValue() { return value; }
+        public int getPosition() { return position; }
     }
 }

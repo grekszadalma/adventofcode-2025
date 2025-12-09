@@ -50,6 +50,17 @@ public class Main {
 
             }
 
+            numbers = sortToColumnsNumbers(numbers);
+            signs = sortToColumnsChars(signs);
+            for (List<Character> signlist : signs) {
+                for (Character ch : signlist) {
+                    System.out.println(ch);
+                }
+
+            }
+
+            long res = sumAllPart1(numbers,signs);
+            System.out.println(res);
 
 
         } catch (FileNotFoundException e) {
@@ -67,23 +78,34 @@ public class Main {
         return false;
     }
 
-    static long sumAll(List<List<Integer>> numbers, List<List<Character>> signs) {
+    static long sumAllPart1(List<List<Integer>> numbers, List<List<Character>> signs) {
         long sum = 0;
-
         int lengthLine = numbers.get(0).size();
-        if (lengthLine != signs.size()) {
-            System.out.println("Invalid");
-            return 0;
-        }
-
-        int lengthNums = numbers.size();
-
-        int i = 0;
 
 
-        while(i < lengthLine) {
-            int j = 0;
-            if (signs.get(i) == '*')
+        int lengthSigns = signs.size();
+        int lengthNumbers = numbers.size();
+
+        int j = 0;
+        System.out.println(signs.size());
+
+        for (int i = 0; i < lengthSigns; i++) {
+            if (signs.get(i).get(0) == '+') {
+                long sumColumn = 0;
+                for(Integer k : numbers.get(j)) {
+                    sumColumn += k;
+                }
+                j++;
+                sum += sumColumn;
+            }
+            if (signs.get(i).get(0) == '*') {
+                long prodColumn = 1;
+                for(Integer k : numbers.get(j)) {
+                    prodColumn *= k;
+                }
+                j++;
+                sum += prodColumn;
+            }
 
         }
 
@@ -91,20 +113,41 @@ public class Main {
         return sum;
     }
 
-    static List<List<Integer>> sortToColumns(List<List<Integer>> numbers) {
-        int n = numbers.size();
-        int m = numbers.get(0).size();
+    static List<List<Integer>> sortToColumnsNumbers(List<List<Integer>> numbers) {
+        int n = numbers.size(); // la taille des colonnes
+        int m = numbers.get(0).size(); // le nombre des colonnes
 
         List<List<Integer>> sorted = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            List<Integer> column = new ArrayList<>(n);
+        for (int i = 0; i < m; i++) {
+            List<Integer> columns = new ArrayList<>(n);
 
-            for (int j = 0; j < m; j++) {
-
+            for (int j = 0; j < n; j++) {
+                columns.add(numbers.get(j).get(i));
             }
+
+            sorted.add(columns);
         }
 
+        return sorted;
+    }
 
+    static List<List<Character>> sortToColumnsChars(List<List<Character>> signs) {
+
+        int n = signs.size(); // la taille des colonnes
+        int m = signs.get(0).size(); // le nombre des colonnes
+
+        List<List<Character>> sorted = new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            List<Character> columns = new ArrayList<>(n);
+
+            for (int j = 0; j < n; j++) {
+                columns.add(signs.get(j).get(i));
+            }
+
+            sorted.add(columns);
+        }
+
+        return sorted;
     }
 
 
